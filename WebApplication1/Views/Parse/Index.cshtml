@@ -1,0 +1,38 @@
+﻿@model WebApplication1.Models.ParseViewModel
+
+@{
+    ViewBag.Title = "Parse Names";
+}
+
+<h2>Parse Names</h2>
+
+@using (Html.BeginForm())
+{
+    <div class="form-group">
+        @Html.LabelFor(m => m.InputText)
+        @Html.TextAreaFor(m => m.InputText, new { @class = "form-control", rows = 10, cols = 50, placeholder = "Enter names separated by comma, comma-space, semicolon, or new line" })
+    </div>
+    <button type="submit" class="btn btn-primary">Parse Text</button>
+}
+
+@if (Model.Users != null && Model.Users.Any())
+{
+    <h3>Parsed User Objects:</h3>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>FirstName</th>
+                <th>LastName</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model.Users)
+            {
+                <tr>
+                    <td>@user.FirstName</td>
+                    <td>@user.LastName</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
