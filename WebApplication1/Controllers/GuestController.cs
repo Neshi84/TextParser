@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Text.RegularExpressions;
 using WebApplication1.Models;
 
 namespace WebApplication1.Controllers
@@ -24,8 +25,8 @@ namespace WebApplication1.Controllers
                 }
                 else
                 {
-                    model.Guests = new List<Guest>
-                    {
+                    model.Guests =
+                    [
                         new Guest
                         {
                             VisitFrom = model.VisitFrom,
@@ -34,7 +35,7 @@ namespace WebApplication1.Controllers
                             FirstName = model.FirstName,
                             LastName = model.LastName
                         }
-                    };
+                    ];
                 }
 
                 // Save guests to the database or perform other actions here.
@@ -51,14 +52,14 @@ namespace WebApplication1.Controllers
             string[] tagsToIgnore = { "title" };
             foreach (var tag in tagsToIgnore)
             {
-                input = System.Text.RegularExpressions.Regex.Replace(input, $@"<\s*{tag}[^>]*>.*?<\s*/\s*{tag}\s*>", string.Empty, System.Text.RegularExpressions.RegexOptions.IgnoreCase | System.Text.RegularExpressions.RegexOptions.Singleline);
+                input = Regex.Replace(input, $@"<\s*{tag}[^>]*>.*?<\s*/\s*{tag}\s*>", string.Empty, RegexOptions.IgnoreCase | RegexOptions.Singleline);
             }
 
             // Replace HTML line breaks with newlines
             input = input.Replace("<br>", "\n").Replace("<br/>", "\n").Replace("<br />", "\n");
 
             // Sanitize input by removing remaining HTML tags, except for <ul>, <ol>, and <li> tags
-            input = System.Text.RegularExpressions.Regex.Replace(input, @"<(?!/?(ul|ol|li)\b)[^>]+>", string.Empty, System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            input = Regex.Replace(input, @"<(?!/?(ul|ol|li)\b)[^>]+>", string.Empty, RegexOptions.IgnoreCase);
 
             // Replace <li> tags with newlines
             input = input.Replace("</li>", "\n").Replace("<li>", "");
@@ -68,13 +69,13 @@ namespace WebApplication1.Controllers
 
             // Define all delimiters in a single regex pattern
             string[] delimiters = new[] { "\r\n", "\n", "\r", ",", ";" };
-            string delimiterPattern = string.Join("|", delimiters.Select(System.Text.RegularExpressions.Regex.Escape));
+            string delimiterPattern = string.Join("|", delimiters.Select(Regex.Escape));
 
             // Replace all delimiters with a single common delimiter (semicolon in this case)
-            string normalizedInput = System.Text.RegularExpressions.Regex.Replace(input, delimiterPattern, ";");
+            string normalizedInput = Regex.Replace(input, delimiterPattern, ";");
 
             // Replace multiple spaces with a single space and trim leading/trailing whitespace
-            normalizedInput = System.Text.RegularExpressions.Regex.Replace(normalizedInput, @"\s+", " ").Trim();
+            normalizedInput = Regex.Replace(normalizedInput, @"\s+", " ").Trim();
 
             // Split input by the common delimiter
             string[] nameList = normalizedInput.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries)
