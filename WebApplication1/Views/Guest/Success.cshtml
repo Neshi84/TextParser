@@ -1,0 +1,38 @@
+﻿@model IEnumerable<WebApplication1.Models.Guest>
+
+@{
+    ViewBag.Title = "Registration Successful";
+}
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
+
+<div class="container mt-5">
+    <h2 class="mb-4">Registration Successful</h2>
+    <p>The following guests have been registered successfully:</p>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Visit From</th>
+                <th>Visit To</th>
+                <th>Project/Firm</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var guest in Model)
+            {
+                <tr>
+                    <td>@guest.VisitFrom.ToString("yyyy-MM-dd HH:mm")</td>
+                    <td>@guest.VisitTo.ToString("yyyy-MM-dd HH:mm")</td>
+                    <td>@guest.ProjectFirm</td>
+                    <td>@guest.FirstName</td>
+                    <td>@guest.LastName</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <a href="@Url.Action("Register", "Guest")" class="btn btn-primary">Register Another Guest</a>
+</div>
